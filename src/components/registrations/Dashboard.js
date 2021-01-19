@@ -1,29 +1,24 @@
-import React, { Component } from "react"
+import React from "react"
 import MyMapComponent from "../../MapContainer"
 import AccordionMenu from "./Accordion"
 import Counter from "./Counter"
 import Footer from "../../Footer"
 
 
-class Dashboard extends Component {
-  constructor() {
-    super()
-    this.state = {
-      users: [], requests: [], conversations: [], messages: []
-    }
-  }
+const Dashboard = () => {
+const [users, setUsers] = React.useState();
+const [requests, setRequests] = React.useState();
+// const RequestContext = React.useContext();
 
-  render() {
-    return (
-      <div className="Dashboard">
-        <AccordionMenu requests={this.state.requests} messages={this.state.messages} />
-        <MyMapComponent requests={this.props.requests} user={this.props.user} />
-        <Counter requests={this.state.requests} user={this.props.user} />
-        <Footer />
-      </div>
+return (
+<div className="Dashboard">
+<AccordionMenu requests={requests} />
+<MyMapComponent requests={requests} setRequests={setRequests} user={users} setUsers={setUsers} />
+<Counter requests={requests} user={users} />
+<Footer />
+</div>
 
-    );
-  }
+);
 }
 
 export default Dashboard; 
