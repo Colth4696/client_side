@@ -3,27 +3,46 @@ import React from "react"
 import { Marker, InfoWindow } from "react-google-maps"
 import RedIcon from "./red-user-icon.png"
 import GreenIcon from "./green-home-icon.png"
-import VolunteerButton from "./volunteerButton"
+import axios from "axios"
 
 
 
-class MyMarker extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { flag: false }
+
+
+const MyMarker = (props) => {
+ const [flag, setFlag] = React.useState(false);
+ const [user, setUser] = React.useState();
+
+
+   const toggle_open = () => {
+    setFlag(!flag)
   }
 
-  toggle_open = () => {
-    this.setState({ flag: !this.state.flag })
-  }
-
-  getIcon = () => {
-    if (this.props.request.category === "Material" ) { return RedIcon }
+  const  getIcon = () => {
+    if (props.request.category === "Material" ) { return RedIcon }
     else { return GreenIcon }
   }
-  
 
-  render() {
+  const onVolunteerClick = async () => {
+    setUser(user)
+
+    const volunteer = {
+      
+      request_id: (props.request.id),
+      user_id: {user}
+    }
+    axios.post('http://localhost:3003/volunteers',{volunteer} )
+    .then(response => {
+      if (response.data.status === 'created') {
+      this.props.volunteers(response.volunteer)
+      }
+    })
+      .catch(error =>{ 
+        console.error(`error: ${error.message}`)
+      })
+
+
+    }
 
     const MarkStyle = {
       height: "30px",
@@ -34,24 +53,27 @@ class MyMarker extends React.Component {
       <div>
         <Marker
           style={MarkStyle}
-          position={this.props.position}
-          onClick={this.toggle_open}
-          icon={this.getIcon()}>
-
-          {this.state.flag && <InfoWindow onCloseClick={this.toggle_open}>
+          position={props.position}
+          onClick={toggle_open}
+          icon={getIcon()}>
+            
+          {flag && <InfoWindow onCloseClick={toggle_open}>
 
             <div>
-              <h4>Task ID:{this.props.request.id}</h4>
-              <h4>Requester ID:{this.props.request.user_id}</h4>
-              <h1>{this.props.request.title}</h1>
-              <h3>{this.props.request.description}</h3>
-              <VolunteerButton  />
+              <h4>Task ID:{props.request.id}</h4>
+              <h4>Requester ID:{props.request.user_id}</h4>
+              <h1>{props.request.title}</h1>
+              <h3>{props.request.description}</h3>
+              <button onClick={onVolunteerClick}>
+                Volunteer
+              </button>
             </div>
           </InfoWindow>}
         </Marker>
       </div>
     )
-  }
-}
+    }
+    
+
 
 export default MyMarker
