@@ -1,18 +1,11 @@
 import React, { Component } from 'react';
 import DummyContent from '../../Dummy';
 import RequestForm from '../../RequestForm';
-import MessageList from '../../MessageList'
 import { Accordion, AccordionItem } from 'react-light-accordion';
 import 'react-light-accordion/demo/css/index.css';
 
-class AccordionMenu extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      messages: this.props.messages
-    }
-  }
-  render() {
+const AccordionMenu = () => {
+    const {message, setMessage} = React.useState
     return (
       <div className="DropMenu">
         <Accordion atomic={true}>
@@ -26,13 +19,12 @@ class AccordionMenu extends Component {
           </AccordionItem>
 
           <AccordionItem title="My Tasks">
-            <MessageList />
+            <DummyContent />
           </AccordionItem>
-
+            
         </Accordion>
       </div>
     );
   }
-}
 
 export default AccordionMenu
