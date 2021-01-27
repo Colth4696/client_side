@@ -10,17 +10,16 @@ class App extends Component {
     super(props);
     this.state = { 
       isLoggedIn: false,
-      user: {}
-     };
+      user: {},
+     }
   }
-componentDidMount() {
-    this.loginStatus()
-  }
+
 loginStatus = () => {
     axios.get('http://localhost:3003/logged_in', {withCredentials: true})
     .then(response => {
+      console.log('response', response);
       if (response.data.logged_in) {
-        this.handleLogin(response)
+        this.handleLogin(response.data)
       } else {
         this.handleLogout()
       }
@@ -40,6 +39,7 @@ handleLogout = () => {
     })
   }
 render() {
+  console.log(this.state.user)
     return (
       <div>
         <BrowserRouter>
@@ -47,7 +47,7 @@ render() {
             <Route 
               exact path='/' 
               render={props => (
-              <Home {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+              <Home {...props} handleLogout={this.handleLogout} user={this.state.user} loggedInStatus={this.state.isLoggedIn}/>
               )}
             />
             <Route 

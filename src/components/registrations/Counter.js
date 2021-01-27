@@ -33,7 +33,7 @@ class Counter extends Component {
                 <h1>
                     Available Tasks: 
                 </h1>
-                {requests.map(request => <div>{request.id}</div>)}
+                {requests.map(request => <div>{request.length}</div>)}
             </div>
         )
         }

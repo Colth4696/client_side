@@ -1,15 +1,29 @@
 import React, { Component } from 'react'
+import consumer from './cable'
 import axios from 'axios'
 
 class ChatBox extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = { 
       content: "",
-      sender_id: "",
-      receiver_id: ""
+      //username: this.props.user && this.props.user.email
     }
   }
+
+  componentDidMount = () => {
+    consumer.subscriptions.create({
+      channel: this.props.chatroom.name,
+     volunteer_id: this.props.volunteer.id,
+    }, {
+      connected: (response) => console.log(response),
+      disconnected: () => console.log('disconnected'),
+      received: data => console.log(data),
+    })
+  };
+  // componentWillUnmount = () => {
+  //   consumer.disconnect()
+  // };
 
   handleChange = (event) => {
     const { name, value } = event.target
@@ -20,35 +34,26 @@ class ChatBox extends Component {
 
   handleSubmit= (event) => {
     event.preventDefault()
-    const { content, sender_id, receiver_id } = this.state
+    const { content, username } = this.state
     let message = {
-      content: content,
-      sender_id: sender_id,
-      receiver_id: receiver_id
+      body: content,
+      chatroom_id: this.props.chatroom.id,
+      volunteer_id: this.props.volunteer.id
     }
 
-    axios.post("http://localhost:3003/messages", { message },
-      { withCredentials: true }
-    )
-    .then(response => {
-      if (response.data.status === 'created') {
-      this.props.chats(response.data);            
-  }
-})        
-  .catch(error => {
-      console.log("request error", error);
-  });
+//     axios.post("http://localhost:3003/messages", { message },
+//       { withCredentials: true }
+//     )
+//     .then(response => {
+//       if (response.data.status === 'created') {
+//       console.log(response.data)           
+//   }
+// })        
+//   .catch(error => {
+//       console.log("request error", error);
+//   });
   event.preventDefault();
 };
-
-  getConvo= (event) => {
-    event.preventDefault()
-    axios.get("http://localhost:3003/conversations")
-    .then(response => {
-      console.log(response.data)
-      this.setState({ conversations: response.data.conversations });
-    })
-}
 
   render() {
     return (
@@ -63,14 +68,6 @@ class ChatBox extends Component {
         required />
         
         <br />
-
-        <input
-        type="integer"
-        name="conversation_id"
-        placeholder="conversation_id"
-        value={this.state.conversation_id}
-        onChange={this.getConvo}
-        required />
 
         <button type="submit">Send</button>
       </form>

@@ -6,7 +6,7 @@ class RequestMarkers extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      requests: []
+      requests: [],
   }
 };
 
@@ -28,7 +28,7 @@ componentDidMount() {
             request={request}
             key={request.id} 
             request_id={request.id}
-            user={this.props.user} />)
+            user={this.props.user}/>)
         })
         }
       </div>

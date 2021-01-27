@@ -7,9 +7,6 @@ import Dashboard from './components/registrations/Dashboard'
 class Home extends Component {
   constructor(props){
   super(props)
-  this.state= {
-  
-  }
   }
   
  handleClick = () => {
@@ -39,7 +36,7 @@ return (
     <Link to='/signup'>Sign Up</Link>
     {
     this.props.loggedInStatus ?      
-    <Dashboard/>: 
+    <Dashboard user={this.props.user}/>: 
     null
     }
     </div>

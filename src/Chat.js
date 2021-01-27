@@ -1,31 +1,17 @@
 import React, { Component } from 'react'
 import ChatBox from './ChatBox'
 
-const OpenRequest = ({ onClick }) => 
-(
-  <button className="accept" 
-  onClick={onClick}>
-    Volunteer!
-  </button>
-)
 
-const MessageBox = ({ onClick, request }) => 
-(
-  <div className="M-Form">
-  <CloseBox onClick={onClick} request={request} />
-  </div>
-)
 
-const CloseBox = ({ onClick, request }) => {
-console.log(request)
-return(
-  <div>
-    <ChatBox request={request}/>
-  <button className="Close" 
-  onClick={onClick}>X</button>
-  </div>
-)
-}
+
+// const CloseBox = ({ request }) => {
+// console.log(request)
+// return(
+//   <div>
+//     <Chatbox request={request}/>
+//   </div>
+// )
+// }
 class Chat extends Component{
   constructor(){
     super()
@@ -49,8 +35,9 @@ class Chat extends Component{
 
       return(
         <div>
-          <OpenRequest onClick={this.boundShowMessage}/><MessageBox onClick={this.state.conversation}/>
-          {this.state.showMessage && <ChatBox request={this.props.request}/>}
+          {/* <OpenRequest onClick={this.boundShowMessage}/> */}
+          <ChatBox request={this.props.request} volunteer={this.props.volunteer} chatroom={this.props.chatroom}/>
+          {this.state.showMessage }
         </div>
       )
     }

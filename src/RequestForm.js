@@ -38,7 +38,7 @@ class RequestForm extends Component {
             )
             .then(response => {
                 if (response.data.status === 'created') {
-                this.props.tasks(response.data)
+                this.props.requests(response.data)
                 this.redirect()            
             }
         })        
@@ -47,7 +47,9 @@ class RequestForm extends Component {
             });
             event.preventDefault();
         };
-        
+        redirect = () => {
+            this.props.history.push('/')
+        }
 
     render() {
         return (

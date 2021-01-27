@@ -1,70 +1,42 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React from 'react'
+import axios from 'axios'
 
-class MessageForm extends Component {
+export default class MessageForm extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {       
-    body: "",
-    to_id: "",
-    from_id: ""
-};
-}
-
-handleChange = (event) => {
-const {name, value} = event.target
-this.setState({
-  [name]: value
-})
-};
-
-handleSubmit = (event) => {
-event.preventDefault()
-const {message, to_id, from_id} = this.state
-let messages = {
-  message: message,
-  to_id: to_id,
-  from_id: from_id
-}
-
-    axios.post("http://localhost:3003/messages", {messages},
-    { withCredentials: true }
-    )
-    .then(response => {
-        if (response.data.status === 'created') {
-        this.props.chats(response.data);            
+    this.state = {
+      body: ''
     }
-})        
-    .catch(error => {
-        console.log("request error", error);
-    });
-    event.preventDefault();
-};
-  
+  }
 
+  handleChange = (e) => { this.setState({body: this.body.value})}
 
+  handleSubmit = (e) => {
+    e.preventDefault()
+     axios.post("http://localhost:3003/chatrooms/messages") 
+     .then(response => {
+      if (response.data.status === 'created') {
+         this.props.requests(response.data)
+        this.setState({body: ''})
+        this.body.focus()
+      }
+      })
+  }
 
   render() {
     return (
-      <div className="MessageDoc">
-        <form onSubmit={this.handleSubmit}>
-          <input
-            type="text"
-            name="body"
-            placeholder="message"
-            value={this.state.body}
+      <div>
+        <form className="messageForm"
+          onSubmit={this.handleSubmit} >
+          <input type="text" name="body" value={this.state.body}
             onChange={this.handleChange}
-            required
-          />
-
-          <br />
-
-          <button type="submit">Send</button>
-
+            autoFocus="true"
+            placeholder="Enter your message here"
+            ref={input => this.body = input }
+           />
+          <input type="submit" value="Send" name="commit" />
         </form>
       </div>
-    );
+    )
   }
 }
-
-export default MessageForm;
